@@ -31,26 +31,26 @@ jobs:
       ######################
       # Build All Services #
       ######################
-#      - name: Build Identity Image
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: ./services/identity
-#          tags: crapi/identity:${{ env.TAG_NAME }}
-#          load: true
-#
-#      - name: Build Workshop Image
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: ./services/workshop
-#          tags: crapi/workshop:${{ env.TAG_NAME }}
-#          load: true
-#
-#      - name: Build Community Image
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: ./services/community
-#          tags: crapi/community:${{ env.TAG_NAME }}
-#          load: true
+      - name: Build Identity Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/identity
+          tags: crapi/identity:${{ env.TAG_NAME }}
+          load: true
+
+      - name: Build Workshop Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/workshop
+          tags: crapi/workshop:${{ env.TAG_NAME }}
+          load: true
+
+      - name: Build Community Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/community
+          tags: crapi/community:${{ env.TAG_NAME }}
+          load: true
 
       - name: Build Web Image
         uses: docker/build-push-action@v3
@@ -59,47 +59,47 @@ jobs:
           tags: crapi/web:${{ env.TAG_NAME }}
           load: true
 
-#      - name: Build Gateway Image
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: ./services/gateway-service
-#          tags: crapi/gateway:${{ env.TAG_NAME }}
-#          load: true
-#
-#      - name: Build Mailhog Image
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: ./services/mailhog
-#          tags: crapi/mailhog:${{ env.TAG_NAME }}
-#          load: true
+      - name: Build Gateway Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/gateway-service
+          tags: crapi/gateway:${{ env.TAG_NAME }}
+          load: true
+
+      - name: Build Mailhog Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/mailhog
+          tags: crapi/mailhog:${{ env.TAG_NAME }}
+          load: true
 
       ###########################
       # Trivy Scan All Services #
       ###########################
 
-#      - name: Trivy Scan - Identity
-#        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
-#        with:
-#          image-ref: crapi/identity:${{ env.TAG_NAME }}
-#          format: sarif
-#          output: trivy-identity.sarif
-#          severity: CRITICAL,HIGH
-#
-#      - name: Trivy Scan - Workshop
-#        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
-#        with:
-#          image-ref: crapi/workshop:${{ env.TAG_NAME }}
-#          format: sarif
-#          output: trivy-workshop.sarif
-#          severity: CRITICAL,HIGH
-#
-#      - name: Trivy Scan - Community
-#        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
-#        with:
-#          image-ref: crapi/community:${{ env.TAG_NAME }}
-#          format: sarif
-#          output: trivy-community.sarif
-#          severity: CRITICAL,HIGH
+      - name: Trivy Scan - Identity
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: crapi/identity:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-identity.sarif
+          severity: CRITICAL,HIGH
+
+      - name: Trivy Scan - Workshop
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: crapi/workshop:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-workshop.sarif
+          severity: CRITICAL,HIGH
+
+      - name: Trivy Scan - Community
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: crapi/community:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-community.sarif
+          severity: CRITICAL,HIGH
 
       - name: Trivy Scan - Web
         uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
@@ -109,42 +109,42 @@ jobs:
           output: trivy-web.sarif
           severity: CRITICAL,HIGH
 
-#      - name: Trivy Scan - Gateway
-#        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
-#        with:
-#          image-ref: crapi/gateway:${{ env.TAG_NAME }}
-#          format: sarif
-#          output: trivy-gateway.sarif
-#          severity: CRITICAL,HIGH
-#
-#      - name: Trivy Scan - Mailhog
-#        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
-#        with:
-#          image-ref: crapi/mailhog:${{ env.TAG_NAME }}
-#          format: sarif
-#          output: trivy-mailhog.sarif
-#          severity: CRITICAL,HIGH
+      - name: Trivy Scan - Gateway
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: crapi/gateway:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-gateway.sarif
+          severity: CRITICAL,HIGH
+
+      - name: Trivy Scan - Mailhog
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: crapi/mailhog:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-mailhog.sarif
+          severity: CRITICAL,HIGH
 
       ############################
       # Upload All SARIF Results #
       ############################
-#      - name: Upload SARIF Results - Identity
-#        uses: github/codeql-action/upload-sarif@v3
-#        with:
-#          sarif_file: trivy-identity.sarif
-#          category: trivy-identity
-#
-#      - name: Upload SARIF Results - Workshop
-#        uses: github/codeql-action/upload-sarif@v3
-#        with:
-#          sarif_file: trivy-workshop.sarif
-#          category: trivy-workshop
-#
-#      - name: Upload SARIF Results - Community
-#        uses: github/codeql-action/upload-sarif@v3
-#        with:
-#          sarif_file: trivy-community.sarif
-#          category: trivy-community
+      - name: Upload SARIF Results - Identity
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-identity.sarif
+          category: trivy-identity
+
+      - name: Upload SARIF Results - Workshop
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-workshop.sarif
+          category: trivy-workshop
+
+      - name: Upload SARIF Results - Community
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-community.sarif
+          category: trivy-community
 
       - name: Upload SARIF Results - Web
         uses: github/codeql-action/upload-sarif@v3
@@ -152,15 +152,15 @@ jobs:
           sarif_file: trivy-web.sarif
           category: trivy-web
 
-#      - name: Upload SARIF Results - Gateway
-#        uses: github/codeql-action/upload-sarif@v3
-#        with:
-#          sarif_file: trivy-gateway.sarif
-#          category: trivy-gateway
-#
-#      - name: Upload SARIF Results - Mailhog
-#        uses: github/codeql-action/upload-sarif@v3
-#        with:
-#          sarif_file: trivy-mailhog.sarif
-#          category: trivy-mailhog
+      - name: Upload SARIF Results - Gateway
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-gateway.sarif
+          category: trivy-gateway
+
+      - name: Upload SARIF Results - Mailhog
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-mailhog.sarif
+          category: trivy-mailhog
 

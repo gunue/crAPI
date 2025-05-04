@@ -1,0 +1,60 @@
+name: Generate and Submit SBOMs
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0'  # Every Sunday at 3 AM UTC
+
+permissions:
+  contents: write  # Required to submit SBOM to dependency graph
+
+jobs:
+  sbom:
+    name: Generate SBOMs for Services
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - identity
+          - workshop
+          - community
+          - web
+          - gateway-service
+          - mailhog
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      ##################################################
+      # Submit SBOM to GitHub Dependency Graph         #
+      ##################################################
+      - name: Submit SBOM to GitHub Dependency Graph - ${{ matrix.service }}
+        uses: aquasecurity/trivy-action@v0.28.0
+        with:
+          scan-type: fs
+          format: github
+          image-ref: ./services/${{ matrix.service }}
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
+          output: dependency-results-${{ matrix.service }}.sbom.json
+
+      ##################################################
+      # Generate CycloneDX SBOM                        #
+      ##################################################
+      - name: Generate CycloneDX SBOM - ${{ matrix.service }}
+        uses: aquasecurity/trivy-action@v0.28.0
+        with:
+          scan-type: fs
+          format: cyclonedx
+          output: ${{ matrix.service }}.cyclonedx.json
+          image-ref: ./services/${{ matrix.service }}
+
+      ##################################################
+      # Upload CycloneDX SBOM as Artifact              #
+      ##################################################
+      - name: Upload CycloneDX SBOM - ${{ matrix.service }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ matrix.service }}
+          path: ${{ matrix.service }}.cyclonedx.json
