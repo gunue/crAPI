@@ -31,7 +31,7 @@ jobs:
       # Submit SBOM to GitHub Dependency Graph         #
       ##################################################
       - name: Submit SBOM to GitHub Dependency Graph - ${{ matrix.service }}
-        uses: aquasecurity/trivy-action@v0.30.0
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           scan-type: fs
           format: github
@@ -43,7 +43,7 @@ jobs:
       # Generate CycloneDX SBOM                        #
       ##################################################
       - name: Generate CycloneDX SBOM - ${{ matrix.service }}
-        uses: aquasecurity/trivy-action@v0.30.0
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           scan-type: fs
           format: cyclonedx
