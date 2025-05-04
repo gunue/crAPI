@@ -17,15 +17,23 @@ jobs:
       matrix:
         service:
           - identity
-          - workshop
-          - community
-          - web
-          - gateway-service
-          - mailhog
+#          - workshop
+#          - community
+#          - web
+#          - gateway-service
+#          - mailhog
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      ##################################################
+      # Update curl to fix dependency issues           #
+      ##################################################
+      - name: Update curl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
 
       ##################################################
       # Submit SBOM to GitHub Dependency Graph         #
