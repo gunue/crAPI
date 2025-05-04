@@ -38,7 +38,7 @@ jobs:
         with:
           image: "localbuild/${{ matrix.service }}:latest"
           artifact-name: ${{ matrix.service }}.spdx.json
-          format: spdx-json
+          format: spdx-tag-value@2.2
           dependency-snapshot: true  # Required for GitHub submission
 
       - name: Upload SPDX SBOM as artifact
