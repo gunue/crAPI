@@ -1,0 +1,160 @@
+name: Trivy Vulnerability Scan
+
+on:
+  workflow_dispatch:  # Manual trigger only to avoid triggering other workflows
+  schedule:
+    - cron: '0 2 * * 0'  # Optional weekly scan (every Sunday)
+
+permissions:
+  contents: read
+  security-events: write  # To upload SARIF to GitHub Security tab
+
+env:
+  TAG_NAME: test-scan
+  TAG_LATEST: latest
+
+jobs:
+  build-and-scan:
+    name: Build and Scan All Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      ######################
+      # Build All Services #
+      ######################
+      - name: Build Identity Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/identity
+          tags: crapi/identity:${{ env.TAG_NAME }}
+          load: true
+
+      - name: Build Workshop Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/workshop
+          tags: crapi/workshop:${{ env.TAG_NAME }}
+          load: true
+
+      - name: Build Community Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/community
+          tags: crapi/community:${{ env.TAG_NAME }}
+          load: true
+
+      - name: Build Web Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/web
+          tags: crapi/web:${{ env.TAG_NAME }}
+          load: true
+
+      - name: Build Gateway Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/gateway-service
+          tags: crapi/gateway:${{ env.TAG_NAME }}
+          load: true
+
+      - name: Build Mailhog Image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./services/mailhog
+          tags: crapi/mailhog:${{ env.TAG_NAME }}
+          load: true
+
+      ###########################
+      # Trivy Scan All Services #
+      ###########################
+
+      - name: Trivy Scan - Identity
+        uses: aquasecurity/trivy-action@v0.14.0
+        with:
+          image-ref: crapi/identity:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-identity.sarif
+          severity: CRITICAL,HIGH
+
+      - name: Trivy Scan - Workshop
+        uses: aquasecurity/trivy-action@v0.14.0
+        with:
+          image-ref: crapi/workshop:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-workshop.sarif
+          severity: CRITICAL,HIGH
+
+      - name: Trivy Scan - Community
+        uses: aquasecurity/trivy-action@v0.14.0
+        with:
+          image-ref: crapi/community:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-community.sarif
+          severity: CRITICAL,HIGH
+
+      - name: Trivy Scan - Web
+        uses: aquasecurity/trivy-action@v0.14.0
+        with:
+          image-ref: crapi/web:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-web.sarif
+          severity: CRITICAL,HIGH
+
+      - name: Trivy Scan - Gateway
+        uses: aquasecurity/trivy-action@v0.14.0
+        with:
+          image-ref: crapi/gateway:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-gateway.sarif
+          severity: CRITICAL,HIGH
+
+      - name: Trivy Scan - Mailhog
+        uses: aquasecurity/trivy-action@v0.14.0
+        with:
+          image-ref: crapi/mailhog:${{ env.TAG_NAME }}
+          format: sarif
+          output: trivy-mailhog.sarif
+          severity: CRITICAL,HIGH
+
+      ############################
+      # Upload All SARIF Results #
+      ############################
+      - name: Upload SARIF Results - Identity
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-identity.sarif
+
+      - name: Upload SARIF Results - Workshop
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-workshop.sarif
+
+      - name: Upload SARIF Results - Community
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-community.sarif
+
+      - name: Upload SARIF Results - Web
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-web.sarif
+
+      - name: Upload SARIF Results - Gateway
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-gateway.sarif
+
+      - name: Upload SARIF Results - Mailhog
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-mailhog.sarif
+
