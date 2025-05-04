@@ -132,29 +132,35 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-identity.sarif
+          category: trivy-identity
 
       - name: Upload SARIF Results - Workshop
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-workshop.sarif
+          category: trivy-workshop
 
       - name: Upload SARIF Results - Community
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-community.sarif
+          category: trivy-community
 
       - name: Upload SARIF Results - Web
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-web.sarif
+          category: trivy-web
 
       - name: Upload SARIF Results - Gateway
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-gateway.sarif
+          category: trivy-gateway
 
       - name: Upload SARIF Results - Mailhog
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-mailhog.sarif
+          category: trivy-mailhog
 
