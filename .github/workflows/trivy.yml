@@ -60,11 +60,11 @@ jobs:
           load: true
 
 #      - name: Build Gateway Image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./services/gateway-service
-          tags: crapi/gateway:${{ env.TAG_NAME }}
-          load: true
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: ./services/gateway-service
+#          tags: crapi/gateway:${{ env.TAG_NAME }}
+#          load: true
 #
 #      - name: Build Mailhog Image
 #        uses: docker/build-push-action@v3
