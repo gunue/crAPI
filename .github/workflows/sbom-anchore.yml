@@ -1,0 +1,48 @@
+name: Anchore Syft SBOM Scan
+
+on:
+  workflow_dispatch:  # Manual trigger
+  schedule:
+    - cron: '0 4 * * 0'  # Weekly on Sunday 4 AM UTC
+
+permissions:
+  contents: write  # Required for Dependency Graph submission
+
+jobs:
+  anchore-sbom:
+    name: Generate and Submit SBOMs with Anchore Syft
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - identity
+#          - workshop
+#          - community
+#          - web
+#          - gateway-service
+#          - mailhog
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image for ${{ matrix.service }}
+        run: |
+          docker build ./services/${{ matrix.service }} \
+            --file ./services/${{ matrix.service }}/Dockerfile \
+            --tag localbuild/${{ matrix.service }}:latest
+
+      - name: Generate SBOM with Anchore Syft and submit to GitHub Dependency Graph
+        uses: anchore/sbom-action@bb716408e75840bbb01e839347cd213767269d4a
+        with:
+          image: "localbuild/${{ matrix.service }}:latest"
+          artifact-name: ${{ matrix.service }}.spdx.json
+          format: spdx-json
+          dependency-snapshot: true  # Required for GitHub submission
+
+      - name: Upload SPDX SBOM as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ matrix.service }}
+          path: ${{ matrix.service }}.spdx.json
