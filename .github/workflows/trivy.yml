@@ -78,7 +78,7 @@ jobs:
       ###########################
 
       - name: Trivy Scan - Identity
-        uses: aquasecurity/trivy-action@v0.14.0
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           image-ref: crapi/identity:${{ env.TAG_NAME }}
           format: sarif
@@ -86,7 +86,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Trivy Scan - Workshop
-        uses: aquasecurity/trivy-action@v0.14.0
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           image-ref: crapi/workshop:${{ env.TAG_NAME }}
           format: sarif
@@ -94,7 +94,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Trivy Scan - Community
-        uses: aquasecurity/trivy-action@v0.14.0
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           image-ref: crapi/community:${{ env.TAG_NAME }}
           format: sarif
@@ -102,7 +102,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Trivy Scan - Web
-        uses: aquasecurity/trivy-action@v0.14.0
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           image-ref: crapi/web:${{ env.TAG_NAME }}
           format: sarif
@@ -110,7 +110,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Trivy Scan - Gateway
-        uses: aquasecurity/trivy-action@v0.14.0
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           image-ref: crapi/gateway:${{ env.TAG_NAME }}
           format: sarif
@@ -118,7 +118,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Trivy Scan - Mailhog
-        uses: aquasecurity/trivy-action@v0.14.0
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
         with:
           image-ref: crapi/mailhog:${{ env.TAG_NAME }}
           format: sarif
